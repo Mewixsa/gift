@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>С Днём Рождения, Полина!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Great Vibes', cursive;
+      color: rgb(255, 196, 245);
+      text-align: center;
+      background: linear-gradient(-45deg, #1a0000, #4a0033, #1a0000, #3d002b);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 4em;
+      opacity: 0;
+      animation: fadeIn 3s ease-in-out forwards;
+      margin-top: 20vh;
+    }
+
+    .flower {
+      width: 20%;
+      margin: 50px auto 0;
+      opacity: 0;
+      transform: scale(0);
+      animation: growFlower 2s ease-in-out forwards;
+      animation-delay: 3s;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .hidden-flower {
+      display: none !important;
+    }
+
+    #wish {
+      margin-top: 40px;
+      font-size: 3em;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes growFlower {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .petal {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+      animation: fall linear infinite;
+      opacity: 0.9;
+      z-index: 10;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .sparkle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, rgb(238, 255, 0), rgba(255,255,255,0));
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.6;
+      animation: sparkleAnim ease-in-out infinite;
+    }
+
+    @keyframes sparkleAnim {
+      0% {
+        transform: scale(1);
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+        filter: blur(2px);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+    }
+
+    /* Всплывающее окно */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #overlay h2 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: pink;
+    }
+
+    #startBtn {
+      font-size: 1.5em;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 20px;
+      background-color: hotpink;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #startBtn:hover {
+      background-color: deeppink;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Всплывающее окно -->
+  <div id="overlay">
+    <h2>Нажми, чтобы начать 🎵</h2>
+    <button id="startBtn">Начать</button>
+  </div>
+
+  <!-- Фоновая музыка -->
+  <audio id="bg-music" loop>
+    <source src="./images/history-historical-background-music-371414.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+  </audio>
+
+  <h1 id="greeting">Полина, с днём рождения!!</h1>
+
+  <img src="./images/main_сакура_1080х1080-removebg-preview.png" alt="flower" class="flower" id="flower">
+
+  <div id="wish"></div>
+
+  <script>
+    // При клике запускаем всё
+    document.getElementById('startBtn').addEventListener('click', () => {
+      document.getElementById('overlay').style.display = 'none';
+
+      // Музыка
+      const music = document.getElementById('bg-music');
+      music.play().catch(err => console.log('Музыка не запущена:', err));
+
+      // Лепестки
+      setInterval(createPetal, 200);
+
+      // Искорки
+      for (let i = 0; i < 50; i++) {
+        createSparkle();
+      }
+
+      // Цветок исчезает и появляются пожелания
+      setTimeout(() => {
+        const flower = document.getElementById('flower');
+        flower.style.opacity = '0';
+        setTimeout(() => {
+          flower.classList.add('hidden-flower');
+          setTimeout(() => {
+            showWishesOneByOne();
+          }, 500);
+        }, 1000);
+      }, 6000);
+    });
+
+    // Лепестки
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * window.innerWidth + 'px';
+      petal.style.top = '-30px';
+      petal.style.backgroundImage = "url('./images/lepest.png')";
+      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+      petal.style.width = petal.style.height = (20 + Math.random() * 20) + 'px';
+      document.body.appendChild(petal);
+      setTimeout(() => petal.remove(), 12000);
+    }
+
+    // Искорки
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.top = Math.random() * 100 + 'vh';
+      sparkle.style.animationDuration = (4 + Math.random() * 6) + 's';
+      sparkle.style.animationDelay = Math.random() * .5 + 's';
+      document.body.appendChild(sparkle);
+    }
+
+    // Пожелания
+    const wishes = [
+      "Счастья",
+      "Здоровья",
+      "Любви",
+      "Красоты",
+      "Радости",
+      "Улыбок",
+      "Вдохновения",
+      "И пусть сбудется всё задуманное 💫",
+      "От найкращого хлопця"
+    ];
+
+    const wishContainer = document.getElementById('wish');
+
+    function showWishesOneByOne(index = 0) {
+      if (index >= wishes.length) return;
+      wishContainer.textContent = wishes[index];
+      wishContainer.style.opacity = '1';
+      setTimeout(() => {
+        wishContainer.style.opacity = '0';
+        setTimeout(() => showWishesOneByOne(index + 1), 1000);
+      }, 2500);
+    }
+  </script>
+
+</body>
+</html>
