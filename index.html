@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>С Днём Рождения, Полина!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     body {
@@ -11,26 +12,19 @@
       font-family: 'Great Vibes', cursive;
       color: rgb(255, 196, 245);
       text-align: center;
-      background: linear-gradient(-45deg, #1a0000, #4a0033, #1a0000, #3d002b);
-      background-size: 400% 400%;
-      animation: gradientBG 20s ease infinite;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      background-color: #1a0010;
     }
 
     h1 {
-      font-size: 4em;
+      font-size: 3em !important;
       opacity: 0;
       animation: fadeIn 3s ease-in-out forwards;
       margin-top: 20vh;
     }
 
     .flower {
-      width: 20%;
+      width: 40vw;
+      max-width: 300px;
       margin: 50px auto 0;
       opacity: 0;
       transform: scale(0);
@@ -90,7 +84,7 @@
       position: fixed;
       width: 8px;
       height: 8px;
-      background: radial-gradient(circle, rgb(238, 255, 0), rgba(255,255,255,0));
+      background: radial-gradient(circle, rgb(249, 255, 83), rgba(255, 0, 0, 0.959));
       border-radius: 50%;
       pointer-events: none;
       z-index: 5;
@@ -116,7 +110,6 @@
       }
     }
 
-    /* Всплывающее окно */
     #overlay {
       position: fixed;
       top: 0; left: 0;
@@ -132,14 +125,15 @@
     }
 
     #overlay h2 {
-      font-size: 3em;
+      font-size: 2.5em;
       margin-bottom: 20px;
       color: pink;
+      text-align: center;
     }
 
     #startBtn {
       font-size: 1.5em;
-      padding: 10px 30px;
+      padding: 12px 32px;
       border: none;
       border-radius: 20px;
       background-color: hotpink;
@@ -150,6 +144,28 @@
 
     #startBtn:hover {
       background-color: deeppink;
+    }
+
+    /* Адаптация для маленьких экранов */
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2.5em;
+        margin-top: 15vh;
+      }
+
+      #wish {
+        font-size: 5em;
+      }
+
+      #overlay h2 {
+        font-size: 1.8em;
+        padding: 0 20px;
+      }
+
+      #startBtn {
+        font-size: 1.2em;
+        padding: 10px 25px;
+      }
     }
   </style>
 </head>
@@ -167,30 +183,24 @@
     Ваш браузер не поддерживает аудио.
   </audio>
 
-  <h1 id="greeting">Полина, с днём рождения!!</h1>
+  <h1 id="greeting">Полина, <br> с днём рождения!!</h1>
 
   <img src="./images/main_сакура_1080х1080-removebg-preview.png" alt="flower" class="flower" id="flower">
 
   <div id="wish"></div>
 
   <script>
-    // При клике запускаем всё
     document.getElementById('startBtn').addEventListener('click', () => {
       document.getElementById('overlay').style.display = 'none';
 
-      // Музыка
       const music = document.getElementById('bg-music');
       music.play().catch(err => console.log('Музыка не запущена:', err));
 
-      // Лепестки
       setInterval(createPetal, 200);
-
-      // Искорки
       for (let i = 0; i < 50; i++) {
         createSparkle();
       }
 
-      // Цветок исчезает и появляются пожелания
       setTimeout(() => {
         const flower = document.getElementById('flower');
         flower.style.opacity = '0';
@@ -203,7 +213,6 @@
       }, 6000);
     });
 
-    // Лепестки
     function createPetal() {
       const petal = document.createElement('div');
       petal.classList.add('petal');
@@ -216,18 +225,16 @@
       setTimeout(() => petal.remove(), 12000);
     }
 
-    // Искорки
     function createSparkle() {
       const sparkle = document.createElement('div');
       sparkle.classList.add('sparkle');
       sparkle.style.left = Math.random() * 100 + 'vw';
       sparkle.style.top = Math.random() * 100 + 'vh';
       sparkle.style.animationDuration = (4 + Math.random() * 6) + 's';
-      sparkle.style.animationDelay = Math.random() * .5 + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
       document.body.appendChild(sparkle);
     }
 
-    // Пожелания
     const wishes = [
       "Счастья",
       "Здоровья",
